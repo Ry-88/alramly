@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap');
+
+body {
+    direction: ltr;
+    font-family: 'Raleway', sans-serif;
+}
+h1 {
+    font-family: 'Raleway', sans-serif;
+}
+
+.nav-link {
+    font-family: 'Raleway', sans-serif !important;
+}
+
+.dropdown-item {
+    font-family: 'Raleway', sans-serif !important;
+}
+
+* {
+    font-family: 'Raleway', sans-serif !important;
+}
+
+img.after-slider {
+    transform: rotateY(180deg);
+}
+
+.gallery-controls-previous,
+.gallery-controls-next {
+    transform: rotateY(180deg);
+
+}
+
+.text-start,
+.text-lg-start {
+    text-align: left !important;
+}
+
+.text-end,
+.text-lg-end {
+    text-align: right !important;
+}
+
+p i.fa-caret-left {
+    transform: rotateY(180deg);
+    margin-left: 5px;
+}
+
+.dropdown-menu {
+    text-align: left;
+}
+
+i {
+    font-family: "Font Awesome 5 Free" !important;
+}
+
+.dropdown-submenu {
+    display: none;
+    position: absolute;
+    right: unset;
+    left: 100%;
+    top: -7px;
+}
+
+.dropdown-submenu-left {
+    left: auto;
+    right: 100%;
+}
+.fab {
+    font-family: "Font Awesome 5 Brands" !important;
+}
+.navbar-expand-lg .navbar-nav .nav-link {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+.btn-arrow {
+    left: unset;
+    right: 15px;
+    transform: rotateY(180deg);
+}
+@media (min-width: 576px)
+{
+
+    .members .offset-sm-3 {
+        margin-right: unset;
+        margin-left: 25%;
+    }
+    .members .offset-sm-1 {
+        margin-right: unset;
+        margin-left: 8.333333333%;
+    }
+}

@@ -1,0 +1,127 @@
+version: "3.8"
+services:
+  torath_app:
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 256M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      update_config:
+        parallelism: 2
+    hostname: torath_app
+    labels:
+      app: torath_app
+    container_name: torath_app
+    image: torath_app:latest
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    expose:
+      - 9000
+    volumes:
+      - .:/usr/src/app
+      - ./public:/usr/src/app/public
+    # depends_on:
+    #   - blog_db
+    networks:
+      - app_network
+      - db
+
+  torath_nginx:
+    container_name: torath_nginx
+    image: torath_nginx:latest
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    volumes:
+      - ./public:/usr/src/app/public
+    ports:
+      - 8600:80
+    depends_on:
+      - torath_app
+    environment:
+      NGINX_FPM_HOST: torath_app
+      NGINX_ROOT: /usr/src/app/public
+    networks:
+      - app_network
+
+  # blog_db:
+  #   container_name: blog_db
+  #   image: mysql:8.0.20
+  #   restart: always
+  #   volumes:
+  #     - ./storage/db-data:/var/lib/mysql
+  #   ports:
+  #     - 3306:3306
+  #   environment:
+  #     MYSQL_DATABASE: blog
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_USER: root
+  #     MYSQL_PASSWORD: root
+  #   networks:
+  #     - app_network
+
+  # torath_redis:
+  #   deploy:
+  #     replicas: 1
+  #     resources:
+  #       limits:
+  #         memory: 2G
+  #       reservations:
+  #         memory: 256M
+  #     restart_policy:
+  #       condition: on-failure
+  #       delay: 5s
+  #       max_attempts: 3
+  #       window: 120s
+  #     update_config:
+  #       parallelism: 2
+  #   hostname: torath_redis
+  #   labels:
+  #     app: torath_redis
+  #   container_name: torath_redis
+  #   image: redis:latest
+  #   ports:
+  #     - 6379:6379
+  #   networks:
+  #     - app_network
+  torath_worker:
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 256M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      update_config:
+        parallelism: 2
+    hostname: torath_worker
+    labels:
+      app: torath_worker
+    container_name: torath_worker
+    image: torath_app:latest
+    networks:
+      - db
+    command: php artisan queue:work
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - torath_app
+
+networks:
+  app_network:
+    driver: overlay
+  db:
+    external: true
